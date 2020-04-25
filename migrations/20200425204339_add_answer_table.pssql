@@ -1,0 +1,7 @@
+CREATE TABLE qm_answer (
+  id serial,
+  created_at timestamp WITH time zone DEFAULT CURRENT_TIMESTAMP,
+  session_id varchar(20) REFERENCES qm_session (id),
+  text varchar(255)
+);
+

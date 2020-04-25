@@ -1,0 +1,4 @@
+ALTER TABLE qm_answer
+  ADD COLUMN player_id varchar(100),
+  ADD COLUMN question_id integer;
+

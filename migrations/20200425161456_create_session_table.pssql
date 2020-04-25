@@ -1,0 +1,8 @@
+ALTER TABLE qm_quizzes RENAME TO qm_quiz;
+
+CREATE TABLE qm_session (
+  id varchar(20) PRIMARY KEY UNIQUE,
+  quiz_id varchar(20) REFERENCES qm_quiz (id),
+  quiz_json jsonb
+);
+

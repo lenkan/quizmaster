@@ -1,0 +1,5 @@
+CREATE TABLE qm_quizzes (
+  id varchar(20) PRIMARY KEY UNIQUE,
+  quiz_json jsonb
+);
+

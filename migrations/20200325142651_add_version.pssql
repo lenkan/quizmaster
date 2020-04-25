@@ -1,0 +1,3 @@
+ALTER TABLE qm_quizzes
+  ADD COLUMN version integer;
+
