@@ -1,0 +1,3 @@
+ALTER TABLE qm_quiz
+  ADD COLUMN name varchar(255);
+

@@ -6,7 +6,7 @@ const render = require("./render");
 
 function renderQuestion(quizId, question, index) {
   return `
-    <div id="question-${question.id}" style="margin: 10px;">
+    <div id="question-${question.id}" style="margin-bottom: 10px;">
       <div class="ui fluid card">
         <div class="content">
           <div class="right floated">
@@ -30,7 +30,7 @@ function renderQuestion(quizId, question, index) {
 
 function renderQuiz(quiz) {
   return render({
-    title: "Build your quiz",
+    title: quiz.title || "Build your quiz",
     scripts: ["/quiz-builder.js"],
     body: renderQuizBody(quiz),
   });
@@ -38,7 +38,11 @@ function renderQuiz(quiz) {
 
 function renderQuizBody(quiz) {
   return `
-  <div style="margin: 10px;">
+  <h1 class="ui header">
+    ${quiz.title || "Build your quiz"}
+  </h1>
+  <p class="ui paragraph">Add questions to your quiz</p>
+  <div style="margin-bottom: 10px;">
     <form 
       class="ui form" 
       action="/quiz-builder/${quiz.id}/questions" 
@@ -53,7 +57,7 @@ function renderQuizBody(quiz) {
   ${(quiz.questions || []).map((question, i) => {
     return renderQuestion(quiz.id, question, i);
   })}
-  <div style="margin: 10px;">
+  <div style="margin-bottom: 10px;">
     <form 
       class="ui form"
       action="/quiz-builder/${quiz.id}/sessions"

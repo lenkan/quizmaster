@@ -35,7 +35,9 @@ router.get("/", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
+    const { title } = req.body;
     const quiz = await ctx.quiz.saveQuiz({
+      title,
       questions: [],
     });
 
