@@ -69,7 +69,7 @@ async function readMigrations(dir) {
 async function getMigrationState() {
   await client.query(SQL_CREATE_MIGRATIONS_TABLE);
   const { rows } = await client.query(SQL_GET_MIGRATION_STATE);
-  return rows[0].id;
+  return rows[0] && rows[0].id;
 }
 
 async function run() {
