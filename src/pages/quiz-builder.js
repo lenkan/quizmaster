@@ -10,12 +10,12 @@ function renderQuestion(quizId, question, index) {
       <div class="ui fluid card">
         <div class="content">
           <div class="right floated">
-            <div
-              data-question-index="${question.id}"
-              data-quiz-id="${quizId}"
-              class="ui icon buttons tiny delete-question"
-            >
-              <button class="ui button">
+            <div class="ui icon buttons tiny"> 
+              <button 
+                data-question-id="${question.id}"
+                data-quiz-id="${quizId}"
+                class="ui button remove-question"
+              >
                 <i class="trash icon"></i>
               </button>
             </div>
@@ -102,6 +102,27 @@ router.post("/quiz-builder/:id/sessions", async (req, res, next) => {
     const quiz = await quizRepo.getQuizById(req.params.id);
     const session = await sessionRepo.createSession(quiz);
     res.redirect(`/quiz-master/${session.id}`);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/quiz-builder/:id/remove-question", async (req, res, next) => {
+  try {
+    const quizId = req.params.id;
+    const questionId = parseInt(req.body.id);
+    const quiz = await quizRepo.getQuizById(quizId);
+
+    if (quiz) {
+      const questions = quiz.questions.filter((q) => q.id !== questionId);
+      await quizRepo.saveQuiz({
+        ...quiz,
+        questions,
+      });
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(404);
+    }
   } catch (error) {
     next(error);
   }

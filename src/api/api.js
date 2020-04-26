@@ -2,27 +2,6 @@ const express = require("express");
 const ctx = require("../data/context");
 const router = express.Router();
 
-router.delete("/quizzes/:id/questions/:qid", async (req, res, next) => {
-  try {
-    const quizId = req.params.id;
-    const questionId = parseInt(req.params.qid);
-    const quiz = await ctx.quiz.getQuizById(quizId);
-
-    if (quiz) {
-      const questions = quiz.questions.filter((q) => q.id !== questionId);
-      await ctx.quiz.saveQuiz({
-        ...quiz,
-        questions,
-      });
-      res.sendStatus(200);
-    } else {
-      res.sendStatus(404);
-    }
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.get("/quizzes", async (req, res, next) => {
   try {
     const quizzes = await ctx.quiz.getQuizzes();

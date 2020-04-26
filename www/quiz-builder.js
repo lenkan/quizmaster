@@ -1,12 +1,19 @@
-Array.from(document.getElementsByClassName("delete-question")).forEach(
+Array.from(document.getElementsByClassName("remove-question")).forEach(
   (element) => {
-    const idx = element.getAttribute("data-question-index");
-    const id = element.getAttribute("data-quiz-id");
+    const questionId = element.getAttribute("data-question-id");
+    const quizId = element.getAttribute("data-quiz-id");
 
     element.addEventListener("click", async () => {
-      await fetch(`/api/quizzes/${id}/questions/${idx}`, {
-        method: "delete",
+      await fetch(`/quiz-builder/${quizId}/remove-question`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: questionId,
+        }),
+        method: "post",
       });
+
       window.location.reload();
     });
   }
