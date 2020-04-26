@@ -1,7 +1,7 @@
 const quiz = require("./quiz-repo");
-const session = require("./session-repo");
+const game = require("./game-repo");
 
 module.exports = {
   quiz,
-  session,
+  game,
 };

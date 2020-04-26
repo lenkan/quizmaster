@@ -1,25 +1,13 @@
 const express = require("express");
-const sessionRepo = require("../data/session-repo");
+const gameRepo = require("../data/game-repo");
 const router = express.Router();
 const render = require("./render");
-const expressSession = require("express-session");
+const expressSession = require("./user-session");
 
-const redis = require("ioredis");
-
-const RedisStore = require("connect-redis")(expressSession);
-const redisClient = redis.createClient();
-
-router.use(
-  expressSession({
-    secret: "quiz cat",
-    store: new RedisStore({ client: redisClient }),
-    saveUninitialized: true,
-    resave: true,
-  })
-);
+router.use(expressSession);
 
 function renderAnswerForm(question) {
-  const answerUrl = `/quiz-play/${question.sessionId}/answers`;
+  const answerUrl = `/quiz-play/${question.gameId}/answers`;
   return `
   <form 
     class="ui form" 
@@ -67,13 +55,13 @@ function renderQuestion(question) {
   `;
 }
 
-function renderSession(session) {
-  return (session.questions || [])
+function renderGame(game) {
+  return (game.questions || [])
     .map((question, i) => {
       return renderQuestion({
         index: i,
-        sessionId: session.id,
-        quizId: session.quizId,
+        gameId: game.id,
+        quizId: game.quizId,
         ...question,
       });
     })
@@ -82,13 +70,13 @@ function renderSession(session) {
 
 router.post("/quiz-play/:id/answers", async (req, res, next) => {
   try {
-    const session = await sessionRepo.getSessionById(req.params.id);
-    if (!session) {
+    const game = await gameRepo.getGameById(req.params.id);
+    if (!game) {
       return res.sendStatus(404);
     }
 
-    await sessionRepo.saveAnswer({
-      sessionId: req.params.id,
+    await gameRepo.saveAnswer({
+      gameId: req.params.id,
       playerId: req.sessionID,
       text: req.body.text,
       questionId: req.body.questionId,
@@ -102,16 +90,16 @@ router.post("/quiz-play/:id/answers", async (req, res, next) => {
 
 router.get("/quiz-play/:id", async (req, res, next) => {
   try {
-    const session = await sessionRepo.getSessionById(req.params.id);
-    if (!session) {
+    const game = await gameRepo.getGameById(req.params.id);
+    if (!game) {
       return res.sendStatus(404);
     }
 
-    const answers = await sessionRepo.getPlayerAnswers(
+    const answers = await gameRepo.getPlayerAnswers(
       req.params.id,
       req.sessionID
     );
-    const questions = session.questions.map((q) => {
+    const questions = game.questions.map((q) => {
       const answer = answers.find((ans) => ans.questionId === q.id);
       return {
         ...q,
@@ -121,8 +109,8 @@ router.get("/quiz-play/:id", async (req, res, next) => {
 
     const html = render({
       title: "Play",
-      body: renderSession({
-        ...session,
+      body: renderGame({
+        ...game,
         questions,
       }),
       scripts: [],

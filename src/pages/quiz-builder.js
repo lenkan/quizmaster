@@ -1,6 +1,6 @@
 const express = require("express");
 const quizRepo = require("../data/quiz-repo");
-const sessionRepo = require("../data/session-repo");
+const gameRepo = require("../data/game-repo");
 const router = express.Router();
 const render = require("./render");
 
@@ -60,7 +60,7 @@ function renderQuizBody(quiz) {
   <div style="margin-bottom: 10px;">
     <form 
       class="ui form"
-      action="/quiz-builder/${quiz.id}/sessions"
+      action="/quiz-builder/${quiz.id}/games"
       method="post"
     >
       <button class="ui fluid button primary">Start</button>
@@ -101,11 +101,11 @@ router.post("/quiz-builder/:id/questions", async (req, res, next) => {
   }
 });
 
-router.post("/quiz-builder/:id/sessions", async (req, res, next) => {
+router.post("/quiz-builder/:id/games", async (req, res, next) => {
   try {
     const quiz = await quizRepo.getQuizById(req.params.id);
-    const session = await sessionRepo.createSession(quiz);
-    res.redirect(`/quiz-master/${session.id}`);
+    const game = await gameRepo.createGame(quiz);
+    res.redirect(`/quiz-master/${game.id}`);
   } catch (error) {
     next(error);
   }

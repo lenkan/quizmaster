@@ -1,0 +1,5 @@
+ALTER TABLE qm_player RENAME COLUMN text TO name;
+
+ALTER TABLE qm_player
+  ADD COLUMN id varchar(255) PRIMARY KEY UNIQUE;
+

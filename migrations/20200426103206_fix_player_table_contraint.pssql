@@ -1,0 +1,8 @@
+DELETE FROM qm_player;
+
+ALTER TABLE qm_player
+  DROP CONSTRAINT qm_player_pkey;
+
+ALTER TABLE qm_player
+  ADD PRIMARY KEY (id, game_id);
+

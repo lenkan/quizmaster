@@ -1,5 +1,5 @@
 const express = require("express");
-const sessionRepo = require("../data/session-repo");
+const gameRepo = require("../data/game-repo");
 const router = express.Router();
 const render = require("./render");
 
@@ -25,7 +25,7 @@ function renderQuestion(question) {
           <ul>
             ${(question.answers || [])
               .map((answer) => {
-                return `<li>${`${answer.playerId}: ${answer.text}`}</li>`;
+                return `<li>${`${answer.playerName}: ${answer.text}`}</li>`;
               })
               .join("")}
           </ul>
@@ -35,13 +35,13 @@ function renderQuestion(question) {
   `;
 }
 
-function renderSession(session) {
-  return (session.questions || [])
+function renderGame(game) {
+  return (game.questions || [])
     .map((question, i) => {
       return renderQuestion({
         index: i,
-        sessionId: session.id,
-        quizId: session.quizId,
+        gameId: game.id,
+        quizId: game.quizId,
         ...question,
       });
     })
@@ -50,13 +50,13 @@ function renderSession(session) {
 
 router.get("/quiz-master/:id", async (req, res, next) => {
   try {
-    const session = await sessionRepo.getSessionById(req.params.id);
-    if (!session) {
+    const game = await gameRepo.getGameById(req.params.id);
+    if (!game) {
       return res.sendStatus(404);
     }
 
-    const answers = await sessionRepo.getAnswers(session.id);
-    const questions = session.questions.map((q) => {
+    const answers = await gameRepo.getAnswers(game.id);
+    const questions = game.questions.map((q) => {
       const ans = answers.filter((a) => a.questionId === q.id);
       return {
         ...q,
@@ -66,8 +66,8 @@ router.get("/quiz-master/:id", async (req, res, next) => {
 
     const html = render({
       title: "Play",
-      body: renderSession({
-        ...session,
+      body: renderGame({
+        ...game,
         questions,
       }),
       scripts: [],
