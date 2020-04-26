@@ -1,9 +1,8 @@
 const express = require("express");
-const repo = require("./repo");
-const sessions = require("../quiz-play/repo");
-const api = require("./api");
+const quizRepo = require("../data/quiz-repo");
+const sessionRepo = require("../data/session-repo");
 const router = express.Router();
-const render = require("../views/render");
+const render = require("./render");
 
 function renderQuestion(quizId, question, index) {
   return `
@@ -68,7 +67,7 @@ function renderQuizBody(quiz) {
 
 router.get("/quiz-builder/:id", async (req, res, next) => {
   try {
-    const quiz = await repo.getQuizById(req.params.id);
+    const quiz = await quizRepo.getQuizById(req.params.id);
     if (quiz) {
       const html = renderQuiz(quiz);
       res.status(200).send(html);
@@ -82,10 +81,10 @@ router.get("/quiz-builder/:id", async (req, res, next) => {
 
 router.post("/quiz-builder/:id/questions", async (req, res, next) => {
   try {
-    const quiz = await repo.getQuizById(req.params.id);
+    const quiz = await quizRepo.getQuizById(req.params.id);
     const question = req.body;
     if (quiz) {
-      await repo.saveQuiz({
+      await quizRepo.saveQuiz({
         ...quiz,
         questions: [...quiz.questions, question],
       });
@@ -100,14 +99,12 @@ router.post("/quiz-builder/:id/questions", async (req, res, next) => {
 
 router.post("/quiz-builder/:id/sessions", async (req, res, next) => {
   try {
-    const quiz = await repo.getQuizById(req.params.id);
-    const session = await sessions.createSession(quiz);
+    const quiz = await quizRepo.getQuizById(req.params.id);
+    const session = await sessionRepo.createSession(quiz);
     res.redirect(`/quiz-master/${session.id}`);
   } catch (error) {
     next(error);
   }
 });
-
-router.use("/api", api);
 
 module.exports = router;

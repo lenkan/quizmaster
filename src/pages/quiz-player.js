@@ -1,7 +1,7 @@
 const express = require("express");
-const repo = require("./repo");
+const sessionRepo = require("../data/session-repo");
 const router = express.Router();
-const render = require("../views/render");
+const render = require("./render");
 const expressSession = require("express-session");
 
 const redis = require("ioredis");
@@ -82,12 +82,12 @@ function renderSession(session) {
 
 router.post("/quiz-play/:id/answers", async (req, res, next) => {
   try {
-    const session = await repo.getSessionById(req.params.id);
+    const session = await sessionRepo.getSessionById(req.params.id);
     if (!session) {
       return res.sendStatus(404);
     }
 
-    await repo.saveAnswer({
+    await sessionRepo.saveAnswer({
       sessionId: req.params.id,
       playerId: req.sessionID,
       text: req.body.text,
@@ -102,12 +102,15 @@ router.post("/quiz-play/:id/answers", async (req, res, next) => {
 
 router.get("/quiz-play/:id", async (req, res, next) => {
   try {
-    const session = await repo.getSessionById(req.params.id);
+    const session = await sessionRepo.getSessionById(req.params.id);
     if (!session) {
       return res.sendStatus(404);
     }
 
-    const answers = await repo.getPlayerAnswers(req.params.id, req.sessionID);
+    const answers = await sessionRepo.getPlayerAnswers(
+      req.params.id,
+      req.sessionID
+    );
     const questions = session.questions.map((q) => {
       const answer = answers.find((ans) => ans.questionId === q.id);
       return {

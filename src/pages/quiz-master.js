@@ -1,7 +1,7 @@
 const express = require("express");
-const repo = require("./repo");
+const sessionRepo = require("../data/session-repo");
 const router = express.Router();
-const render = require("../views/render");
+const render = require("./render");
 
 function renderQuestion(question) {
   return `
@@ -50,12 +50,12 @@ function renderSession(session) {
 
 router.get("/quiz-master/:id", async (req, res, next) => {
   try {
-    const session = await repo.getSessionById(req.params.id);
+    const session = await sessionRepo.getSessionById(req.params.id);
     if (!session) {
       return res.sendStatus(404);
     }
 
-    const answers = await repo.getAnswers(session.id);
+    const answers = await sessionRepo.getAnswers(session.id);
     const questions = session.questions.map((q) => {
       const ans = answers.filter((a) => a.questionId === q.id);
       return {
