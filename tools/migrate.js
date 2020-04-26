@@ -1,11 +1,14 @@
 const fs = require("fs");
 const path = require("path");
+const config = require("../src/config");
 const { Client } = require("pg");
 
 const client = new Client({
-  database: process.env.DATABASE || "quizmaster",
-  user: "postgres",
-  password: "",
+  database: config.db.dbname,
+  host: config.db.hostname,
+  port: config.db.port,
+  user: config.db.username,
+  password: config.db.password,
 });
 
 client

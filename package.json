@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "yarn migrate && node src/index.js",
+    "dev": "yarn migrate && nodemon src/index.js",
     "clean": "rm -rf node_mdules/",
     "lint": "eslint \"www/*.js\" \"src/*.js\" \"tools/*.js\"",
     "migrate": "node tools/migrate.js",
