@@ -1,10 +1,10 @@
 const expressSession = require("express-session");
 const config = require("../config");
 
-const redis = require("ioredis");
+const Redis = require("ioredis");
 
 const RedisStore = require("connect-redis")(expressSession);
-const redisClient = redis({
+const redisClient = new Redis({
   host: config.redis.hostname,
   port: config.redis.port,
 });
