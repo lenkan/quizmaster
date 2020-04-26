@@ -10,6 +10,7 @@ const quizHome = require("./pages/quiz-homepage");
 const api = require("./api/api");
 // const io = require("socket.io")(server);
 const requestLogger = require("./request-logger");
+const config = require("./config");
 
 app.use(requestLogger());
 app.use(bodyParser.json({}));
@@ -23,4 +24,6 @@ app.use(quizPlay);
 app.use(quizJoin);
 app.use(api);
 
-server.listen(8080);
+server.listen(config.port, () => {
+  console.log(`Listening on ${config.port}`);
+});

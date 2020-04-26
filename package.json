@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "clean": "rm -rf node_mdules/",
     "lint": "eslint \"www/*.js\" \"src/*.js\" \"tools/*.js\"",
