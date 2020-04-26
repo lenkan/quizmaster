@@ -2,6 +2,7 @@ version: "3"
 
 volumes:
   qm-data:
+  qm-redis:
 
 services:
   db:
@@ -16,6 +17,8 @@ services:
 
   redis:
     image: redis
+    volumes:
+      - qm-redis:/data
     ports:
       - 6379:6379
 
