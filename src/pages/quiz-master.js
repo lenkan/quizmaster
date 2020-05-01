@@ -2,6 +2,7 @@ const express = require("express");
 const gameRepo = require("../data/game-repo");
 const router = express.Router();
 const render = require("./render");
+const config = require("../config");
 
 function renderQuestion(question) {
   return `
@@ -35,9 +36,26 @@ function renderQuestion(question) {
   `;
 }
 
+function renderHead(game) {
+  const gameUrl =`${config.baseUrl}/quiz-join/${game.id}`
+  const gameLink = `<a href="${gameUrl}">${gameUrl}</a>`
+  
+  return `
+  <div style="margin: 10px;">
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="header">${game.title}</div>
+        <div class="description">Invite to join here: ${gameLink}</div>
+      </div>
+    </div>
+  </div>
+  `;
+}
+
 function renderGame(game) {
-  return (game.questions || [])
+  const questionsHtml  =  (game.questions || [])
     .map((question, i) => {
+      
       return renderQuestion({
         index: i,
         gameId: game.id,
@@ -46,6 +64,13 @@ function renderGame(game) {
       });
     })
     .join("\n");
+
+    const header = renderHead(game);
+
+    return `
+    ${header} 
+    ${questionsHtml}
+    `;
 }
 
 router.get("/quiz-master/:id", async (req, res, next) => {
@@ -63,7 +88,7 @@ router.get("/quiz-master/:id", async (req, res, next) => {
         answers: ans,
       };
     });
-
+    
     const html = render({
       title: "Play",
       body: renderGame({

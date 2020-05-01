@@ -22,4 +22,5 @@ module.exports = {
     port: parseInt(requireEnv("REDIS_PORT", "6379")),
   },
   port: requireEnv("PORT", "8080"),
+  baseUrl: requireEnv("BASE_URL", "http://localhost:8080"),
 };
