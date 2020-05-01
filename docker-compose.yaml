@@ -29,5 +29,6 @@ services:
       - DB_HOST=db
       - REDIS_HOST=redis
       - PORT=8080
+      - BASE_URL=${BASE_URL:-http://localhost:8080}
     ports:
       - 8080:8080
