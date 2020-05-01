@@ -21,6 +21,14 @@ function mapAnswerRow(row) {
   };
 }
 
+function mapPlayerRow(row) {
+  return {
+    playerId: row.id,
+    gameId: row.game_id,
+    name: row.name,
+  };
+}
+
 module.exports.createGame = async function createGame(quiz) {
   const { id: quiz_id, ...quiz_json } = quiz;
   const id = shortid();
@@ -107,4 +115,15 @@ module.exports.savePlayer = async function savePlayer({
 }) {
   const sql = `INSERT INTO qm_player(id, game_id, name) VALUES ($1, $2, $3);`;
   await client.query(sql, [playerId, gameId, name]);
+};
+
+module.exports.getPlayer = async function savePlayer(playerId) {
+  const sql = `SELECT (id, game_id, name) FROM qm_player WHERE id = $1;`;
+  const { rows } = await client.query(sql, [playerId]);
+
+  if (rows.length === 0) {
+    return null;
+  }
+
+  return mapPlayerRow(rows[0]);
 };
