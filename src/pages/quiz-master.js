@@ -37,9 +37,9 @@ function renderQuestion(question) {
 }
 
 function renderHead(game) {
-  const gameUrl =`${config.baseUrl}/quiz-join/${game.id}`
-  const gameLink = `<a href="${gameUrl}">${gameUrl}</a>`
-  
+  const gameUrl = `${config.baseUrl}/quiz-join/${game.id}`;
+  const gameLink = `<a href="${gameUrl}">${gameUrl}</a>`;
+
   return `
   <div style="margin: 10px;">
     <div class="ui fluid card">
@@ -53,9 +53,8 @@ function renderHead(game) {
 }
 
 function renderGame(game) {
-  const questionsHtml  =  (game.questions || [])
+  const questionsHtml = (game.questions || [])
     .map((question, i) => {
-      
       return renderQuestion({
         index: i,
         gameId: game.id,
@@ -65,9 +64,9 @@ function renderGame(game) {
     })
     .join("\n");
 
-    const header = renderHead(game);
+  const header = renderHead(game);
 
-    return `
+  return `
     ${header} 
     ${questionsHtml}
     `;
@@ -88,7 +87,7 @@ router.get("/quiz-master/:id", async (req, res, next) => {
         answers: ans,
       };
     });
-    
+
     const html = render({
       title: "Play",
       body: renderGame({

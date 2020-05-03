@@ -9,7 +9,7 @@
     "stop:deps": "docker-compose down",
     "dev": "yarn migrate && nodemon src/index.js",
     "clean": "rm -rf node_mdules/",
-    "lint": "eslint \"www/*.js\" \"src/*.js\" \"tools/*.js\"",
+    "lint": "eslint \"www/**/*.js\" \"src/**/*.js\" \"tools/**/*.js\"",
     "test": "jest",
     "migrate": "node tools/migrate.js",
     "migrate:new": "node tools/migrate-new.js"
