@@ -23,4 +23,5 @@ module.exports = {
   },
   port: requireEnv("PORT", "8080"),
   baseUrl: requireEnv("BASE_URL", "http://localhost:8080"),
+  loglevel: requireEnv("LOG_LEVEL", "info"),
 };

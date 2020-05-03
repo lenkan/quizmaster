@@ -1,8 +1,10 @@
+const log = require("./logger");
+
 module.exports = () => (req, res, next) => {
   const now = Date.now();
-  console.log("->", req.method, req.path);
+  log.info("->", req.method, req.path);
   res.on("finish", () => {
-    console.log(
+    log.info(
       "<-",
       req.method,
       req.path,
