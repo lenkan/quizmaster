@@ -10,6 +10,7 @@
     "dev": "yarn migrate && nodemon src/index.js",
     "clean": "rm -rf node_mdules/",
     "lint": "eslint \"www/*.js\" \"src/*.js\" \"tools/*.js\"",
+    "test": "jest",
     "migrate": "node tools/migrate.js",
     "migrate:new": "node tools/migrate-new.js"
   },
@@ -24,10 +25,11 @@
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
+    "@types/jest": "^25.2.1",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
-    "jest": "^24.9.0",
+    "jest": "^25.5.4",
     "nodemon": "^2.0.3",
     "prettier": "^2.0.5"
   }
