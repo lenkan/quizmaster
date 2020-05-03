@@ -95,7 +95,8 @@ router.get("/quiz-play/:id", async (req, res, next) => {
       return res.sendStatus(404);
     }
 
-    const player = req.sessionID && (await gameRepo.getPlayer(req.sessionID));
+    const player =
+      req.sessionID && (await gameRepo.getPlayerById(req.sessionID));
     if (!player) {
       return res.redirect(`/quiz-join/${req.params.id}`);
     }

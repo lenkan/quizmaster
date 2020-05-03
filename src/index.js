@@ -7,7 +7,8 @@ const quizMaster = require("./pages/quiz-master");
 const quizPlay = require("./pages/quiz-player");
 const quizJoin = require("./pages/quiz-join");
 const quizHome = require("./pages/quiz-homepage");
-const api = require("./api/api");
+const quizApi = require("./api/quiz-api");
+const gameApi = require("./api/game-api");
 // const io = require("socket.io")(server);
 const requestLogger = require("./request-logger");
 const logger = require("./logger");
@@ -23,7 +24,8 @@ app.use(quizBuilder);
 app.use(quizMaster);
 app.use(quizPlay);
 app.use(quizJoin);
-app.use(api);
+app.use("/api", quizApi);
+app.use("/api", gameApi);
 
 server.listen(config.port, () => {
   logger.info(`Listening on ${config.port}`);

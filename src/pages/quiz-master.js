@@ -3,6 +3,7 @@ const gameRepo = require("../data/game-repo");
 const router = express.Router();
 const render = require("./render");
 const config = require("../config");
+const datefns = require("../date-fns");
 
 function renderQuestion(question) {
   return `
@@ -36,6 +37,26 @@ function renderQuestion(question) {
   `;
 }
 
+function renderPlayerListItem(player) {
+  return `
+  <div class="item">
+    <img class="ui avatar image" src="/img/${player.avatar}.svg">
+    <div class="content">
+      <div class="header">${player.name}</div>
+      <div class="description">${player.joined}</div>
+    </div>
+  </div>
+  `;
+}
+
+function renderPlayerList(game) {
+  return `
+    <div class="ui list" id="player-list">
+      ${game.players.map(renderPlayerListItem).join("\n")}
+    </div>
+  `;
+}
+
 function renderHead(game) {
   const gameUrl = `${config.baseUrl}/quiz-join/${game.id}`;
   const gameLink = `<a href="${gameUrl}">${gameUrl}</a>`;
@@ -45,7 +66,10 @@ function renderHead(game) {
     <div class="ui fluid card">
       <div class="content">
         <div class="header">${game.title}</div>
-        <div class="description">Invite to join here: ${gameLink}</div>
+        <div class="description">
+          <p>Invite to join here: ${gameLink}</p>
+          ${renderPlayerList(game)}
+        </div>
       </div>
     </div>
   </div>
@@ -80,6 +104,16 @@ router.get("/quiz-master/:id", async (req, res, next) => {
     }
 
     const answers = await gameRepo.getAnswers(game.id);
+    const now = Date.now();
+    const players = await gameRepo
+      .getPlayersByGameId(game.id)
+      .then((players) => {
+        return players.map((player) => ({
+          ...player,
+          joined: `Joined ${datefns.getTimeDifference(now, player.createdAt)}`,
+        }));
+      });
+
     const questions = game.questions.map((q) => {
       const ans = answers.filter((a) => a.questionId === q.id);
       return {
@@ -93,8 +127,9 @@ router.get("/quiz-master/:id", async (req, res, next) => {
       body: renderGame({
         ...game,
         questions,
+        players,
       }),
-      scripts: [],
+      scripts: ["/quiz-master.js"],
     });
 
     return res.status(200).send(html);

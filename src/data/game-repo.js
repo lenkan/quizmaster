@@ -26,6 +26,8 @@ function mapPlayerRow(row) {
     playerId: row.id,
     gameId: row.game_id,
     name: row.name,
+    createdAt: row.created_at,
+    avatarId: row.avatar_id || "avatar1",
   };
 }
 
@@ -39,8 +41,13 @@ module.exports.createGame = async function createGame(quiz) {
 };
 
 module.exports.getGameById = async function getGameById(id) {
-  const sql = `SELECT id, quiz_json FROM qm_game WHERE id = $1`;
-  const { rows } = await client.query(sql, [id]);
+  const gameSQL = `
+    SELECT id, quiz_json 
+    FROM qm_game 
+    WHERE id = $1
+  `;
+
+  const { rows } = await client.query(gameSQL, [id]);
   if (rows.length === 0) {
     return null;
   }
@@ -48,22 +55,38 @@ module.exports.getGameById = async function getGameById(id) {
   return mapRow(rows[0]);
 };
 
+module.exports.getPlayersByGameId = async function getPlayersByGameId(gameId) {
+  const sql = `
+    SELECT 
+      qm_player.id,
+      qm_player.name,
+      qm_player.game_id,
+      qm_player.created_at
+    FROM qm_player 
+    WHERE game_id = $1
+  `;
+
+  const { rows } = await client.query(sql, [gameId]);
+
+  return rows.map(mapPlayerRow);
+};
+
 module.exports.getAnswers = async function getAnswers(id) {
   const sql = `
-SELECT
-  qm_answer.id,
-  qm_answer.text,
-  qm_answer.question_id,
-  qm_answer.id,
-  qm_answer.player_id,
-  qm_player.name as player_name
-FROM
-  qm_answer 
-  JOIN qm_player ON 
-    qm_player.id = qm_answer.player_id AND 
-    qm_player.game_id = qm_answer.game_id
-WHERE
-  qm_answer.game_id = $1;
+    SELECT
+      qm_answer.id,
+      qm_answer.text,
+      qm_answer.question_id,
+      qm_answer.id,
+      qm_answer.player_id,
+      qm_player.name as player_name
+    FROM
+      qm_answer 
+      JOIN qm_player ON 
+        qm_player.id = qm_answer.player_id AND 
+        qm_player.game_id = qm_answer.game_id
+    WHERE
+      qm_answer.game_id = $1;
   `;
 
   const { rows } = await client.query(sql, [id]);
@@ -117,8 +140,16 @@ module.exports.savePlayer = async function savePlayer({
   await client.query(sql, [playerId, gameId, name]);
 };
 
-module.exports.getPlayer = async function savePlayer(playerId) {
-  const sql = `SELECT (id, game_id, name) FROM qm_player WHERE id = $1;`;
+module.exports.getPlayerById = async function getPlayerById(playerId) {
+  const sql = `
+    SELECT 
+      id, 
+      game_id, 
+      name, 
+      created_at
+    FROM qm_player
+    WHERE id = $1;
+  `;
   const { rows } = await client.query(sql, [playerId]);
 
   if (rows.length === 0) {
