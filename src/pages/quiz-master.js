@@ -40,7 +40,7 @@ function renderQuestion(question) {
 function renderPlayerListItem(player) {
   return `
   <div class="item">
-    <img class="ui avatar image" src="/img/${player.avatar}.svg">
+    <img class="ui avatar image" src="/img/${player.avatarId}.svg">
     <div class="content">
       <div class="header">${player.name}</div>
       <div class="description">${player.joined}</div>
