@@ -1,9 +1,9 @@
-FROM node:12-alpine
+FROM node:14-alpine
 
 ENV NODE_ENV=production
 WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn --frozen-lockfile
+COPY package.json package-lock.json ./
+RUN npm ci --production
 COPY . .
 
-ENTRYPOINT [ "yarn", "start" ]
+ENTRYPOINT [ "npm", "start" ]
