@@ -2,10 +2,8 @@ import * as log from "./logger.js";
 
 export default () => (req, res, next) => {
   const now = Date.now();
-  log.info("->", req.method, req.path);
   res.on("finish", () => {
     log.info(
-      "<-",
       req.method,
       req.path,
       res.statusCode,

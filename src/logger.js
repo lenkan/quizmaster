@@ -1,4 +1,5 @@
 import config from "./config.js";
+import util from "util";
 
 const levels = {
   debug: 0,
@@ -11,7 +12,9 @@ const loglevel =
   levels[config.loglevel] !== undefined ? levels[config.loglevel] : 1;
 
 function log(level, ...msg) {
-  console.log(`${level}:`, ...msg);
+  process.stdout.write(
+    `${level}: ${msg.map((m) => util.format(m)).join(" ")}\n`
+  );
 }
 
 export function info(...msg) {
