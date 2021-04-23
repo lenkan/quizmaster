@@ -5,59 +5,53 @@ import config from "../config.js";
 import * as datefns from "../date-fns.js";
 const router = express.Router();
 
-function renderQuestion(question) {
-  return `
-    <div id="question-${question.id}" style="margin: 10px;">
-      <div class="ui fluid card">
-        <div class="content">
-          <div class="right floated">
-            <div class="ui icon buttons tiny">
-              <button 
-                class="ui button start-question"
-                data-question-id="${question.id}"
-              >
-                <i class="play icon"></i>
-              </button>
-            </div>
-          </div>
-          <div class="header">Question ${question.index + 1}</div>
-          <div class="description">${question.text}</div>
-        </div>
-        <div class="content">
-          <ul>
-            ${(question.answers || [])
-              .map((answer) => {
-                return `<li>${`${answer.playerName}: ${answer.text}`}</li>`;
-              })
-              .join("")}
-          </ul>
+const Question = (question) => `
+<div id="question-${question.id}" style="margin: 10px;">
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="right floated">
+        <div class="ui icon buttons tiny">
+          <button 
+            class="ui button start-question"
+            data-question-id="${question.id}"
+          >
+            <i class="play icon"></i>
+          </button>
         </div>
       </div>
+      <div class="header">Question ${question.index + 1}</div>
+      <div class="description">${question.text}</div>
     </div>
-  `;
-}
-
-function renderPlayerListItem(player) {
-  return `
-  <div class="item">
-    <img class="ui avatar image" src="/img/${player.avatarId}.svg">
     <div class="content">
-      <div class="header">${player.name}</div>
-      <div class="description">${player.joined}</div>
+      <ul>
+        ${(question.answers || [])
+          .map((answer) => {
+            return `<li>${`${answer.playerName}: ${answer.text}`}</li>`;
+          })
+          .join("")}
+      </ul>
     </div>
   </div>
-  `;
-}
+</div>
+`;
 
-function renderPlayerList(game) {
-  return `
-    <div class="ui list" id="player-list">
-      ${game.players.map(renderPlayerListItem).join("\n")}
-    </div>
-  `;
-}
+const PlayerListItem = (player) => `
+<div class="item">
+  <img class="ui avatar image" src="/img/${player.avatarId}.svg">
+  <div class="content">
+    <div class="header">${player.name}</div>
+    <div class="description">${player.joined}</div>
+  </div>
+</div>
+`;
 
-function renderHead(game) {
+const PlayerList = (game) => `
+<div class="ui list" id="player-list">
+  ${game.players.map(PlayerListItem).join("\n")}
+</div>
+`;
+
+const Head = (game) => {
   const gameUrl = `${config.baseUrl}/quiz-join/${game.id}`;
   const gameLink = `<a href="${gameUrl}">${gameUrl}</a>`;
 
@@ -68,18 +62,18 @@ function renderHead(game) {
         <div class="header">${game.title}</div>
         <div class="description">
           <p>Invite to join here: ${gameLink}</p>
-          ${renderPlayerList(game)}
+          ${PlayerList(game)}
         </div>
       </div>
     </div>
   </div>
   `;
-}
+};
 
 function renderGame(game) {
   const questionsHtml = (game.questions || [])
     .map((question, i) => {
-      return renderQuestion({
+      return Question({
         index: i,
         gameId: game.id,
         quizId: game.quizId,
@@ -88,7 +82,7 @@ function renderGame(game) {
     })
     .join("\n");
 
-  const header = renderHead(game);
+  const header = Head(game);
 
   return `
     ${header} 

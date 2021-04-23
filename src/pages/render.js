@@ -1,5 +1,4 @@
-function renderHead({ title }) {
-  return `
+const Head = ({ title }) => `
 <head>
   <meta charset="utf-8" />
   <link rel="stylesheet" href="/css/reset.css" />
@@ -8,17 +7,15 @@ function renderHead({ title }) {
   <title>${title}</title>
 </head>
 `;
-}
 
-function main({ title, scripts, body }) {
-  return `
+const Main = ({ title, scripts, body }) => `
 <!DOCTYPE html>
 <html lang="en">
 
-${renderHead({ title })}
+${Head({ title })}
 
 <body>
-  ${renderContent(body)}
+  ${Content(body)}
   ${(scripts || [])
     .map((script) => `<script src="${script}"></script>`)
     .join("\n")}
@@ -26,17 +23,14 @@ ${renderHead({ title })}
 
 </html>
 `;
-}
 
-function renderContent(content) {
-  return `
+const Content = (content) => `
 <main style="max-width: 600px; margin: auto;">
   ${content}
 </main>
 `;
-}
 
-export default Object.assign(main, {
-  head: renderHead,
-  main: renderContent,
+export default Object.assign(Main, {
+  head: Head,
+  main: Content,
 });
