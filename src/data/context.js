@@ -1,7 +1,7 @@
-const quiz = require("./quiz-repo");
-const game = require("./game-repo");
+import * as quiz from "./quiz-repo.js";
+import * as game from "./game-repo.js";
 
-module.exports = {
+export default {
   quiz,
   game,
 };

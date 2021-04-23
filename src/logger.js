@@ -1,4 +1,4 @@
-const config = require("./config");
+import config from "./config.js";
 
 const levels = {
   debug: 0,
@@ -14,26 +14,26 @@ function log(level, ...msg) {
   console.log(`${level}:`, ...msg);
 }
 
-module.exports.info = function info(...msg) {
+export function info(...msg) {
   if (loglevel <= 1) {
     log("INFO", ...msg);
   }
-};
+}
 
-module.exports.error = function error(...msg) {
+export function error(...msg) {
   if (loglevel <= 3) {
     log("ERROR", ...msg);
   }
-};
+}
 
-module.exports.debug = function debug(...msg) {
+export function debug(...msg) {
   if (loglevel <= 0) {
     log("DEBUG", ...msg);
   }
-};
+}
 
-module.exports.warn = function warn(...msg) {
+export function warn(...msg) {
   if (loglevel <= 2) {
     log("WARN", ...msg);
   }
-};
+}

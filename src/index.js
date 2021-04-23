@@ -1,22 +1,22 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+import express from "express";
+import quizBuilder from "./pages/quiz-builder.js";
+import quizMaster from "./pages/quiz-master.js";
+import quizPlay from "./pages/quiz-player.js";
+import quizJoin from "./pages/quiz-join.js";
+import quizHome from "./pages/quiz-homepage.js";
+import quizApi from "./api/quiz-api.js";
+import gameApi from "./api/game-api.js";
+import requestLogger from "./request-logger.js";
+import * as logger from "./logger.js";
+import config from "./config.js";
+import http from "http";
+
 const app = express();
-const server = require("http").createServer(app);
-const quizBuilder = require("./pages/quiz-builder");
-const quizMaster = require("./pages/quiz-master");
-const quizPlay = require("./pages/quiz-player");
-const quizJoin = require("./pages/quiz-join");
-const quizHome = require("./pages/quiz-homepage");
-const quizApi = require("./api/quiz-api");
-const gameApi = require("./api/game-api");
-// const io = require("socket.io")(server);
-const requestLogger = require("./request-logger");
-const logger = require("./logger");
-const config = require("./config");
+const server = http.createServer(app);
 
 app.use(requestLogger());
-app.use(bodyParser.json({}));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json({}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("./www"));
 
 app.use(quizHome);

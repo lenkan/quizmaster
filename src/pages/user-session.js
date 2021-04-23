@@ -1,15 +1,16 @@
-const expressSession = require("express-session");
-const config = require("../config");
+import expressSession from "express-session";
+import config from "../config.js";
 
-const Redis = require("ioredis");
+import Redis from "ioredis";
+import connectRedis from "connect-redis";
 
-const RedisStore = require("connect-redis")(expressSession);
+const RedisStore = connectRedis(expressSession);
 const redisClient = new Redis({
   host: config.redis.hostname,
   port: config.redis.port,
 });
 
-module.exports = expressSession({
+export default expressSession({
   secret: "quiz cat",
   store: new RedisStore({ client: redisClient }),
   saveUninitialized: true,

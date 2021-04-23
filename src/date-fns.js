@@ -1,4 +1,4 @@
-module.exports.getTimeDifference = function getJoinString(now, then) {
+export function getJoinString(now, then) {
   const diffMs = new Date(now) - new Date(then).getTime();
   if (diffMs < 1000 * 30) {
     return `just now`;
@@ -23,4 +23,4 @@ module.exports.getTimeDifference = function getJoinString(now, then) {
   }
 
   return `an hour ago`;
-};
+}

@@ -36,7 +36,7 @@ function renderContent(content) {
 `;
 }
 
-module.exports = Object.assign(main, {
+export default Object.assign(main, {
   head: renderHead,
   main: renderContent,
 });

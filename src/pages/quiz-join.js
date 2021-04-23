@@ -1,8 +1,8 @@
-const express = require("express");
-const gameRepo = require("../data/game-repo");
+import express from "express";
+import * as gameRepo from "../data/game-repo.js";
+import render from "./render.js";
+import expressSession from "./user-session.js";
 const router = express.Router();
-const render = require("./render");
-const expressSession = require("./user-session");
 
 function renderJoinPage() {
   return `
@@ -63,4 +63,4 @@ router.post("/quiz-join/:id", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

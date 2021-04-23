@@ -1,21 +1,20 @@
 {
   "env": {
-    "browser": true,
-    "commonjs": true,
-    "es6": true,
+    "es2021": true,
     "node": true
   },
-  "extends": [
-    "eslint:recommended",
-    "prettier"
-  ],
-  "plugins": [
-    "prettier"
-  ],
+  "extends": ["eslint:recommended", "prettier"],
   "parserOptions": {
-    "ecmaVersion": 2018
+    "ecmaVersion": 12,
+    "sourceType": "module"
   },
-  "rules": {
-    "prettier/prettier": "error"
-  }
+  "rules": {},
+  "overrides": [
+    {
+      "files": ["www/*.js"],
+      "env": {
+        "browser": true
+      }
+    }
+  ]
 }

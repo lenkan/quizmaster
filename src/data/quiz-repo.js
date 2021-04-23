@@ -1,5 +1,5 @@
-const client = require("./db");
-const shortid = require("shortid");
+import client from "./db.js";
+import shortid from "shortid";
 
 function mapRow(row) {
   return {
@@ -10,7 +10,7 @@ function mapRow(row) {
   };
 }
 
-module.exports.getQuizById = async function getQuizById(id) {
+export async function getQuizById(id) {
   const sql = `SELECT id, quiz_json, title FROM qm_quiz WHERE id = $1`;
   const { rows } = await client.query(sql, [id]);
   if (rows.length === 0) {
@@ -18,15 +18,15 @@ module.exports.getQuizById = async function getQuizById(id) {
   }
 
   return mapRow(rows[0]);
-};
+}
 
-module.exports.getQuizzes = async function getQuizzes() {
+export async function getQuizzes() {
   const sql = `SELECT id, quiz_json, title FROM qm_quiz`;
   const { rows } = await client.query(sql);
   return rows.map(mapRow);
-};
+}
 
-module.exports.saveQuiz = async function saveQuiz(quiz) {
+export async function saveQuiz(quiz) {
   const { id = shortid(), title, ...quiz_json } = quiz;
   if (quiz.id) {
     const sql = `UPDATE qm_quiz SET title = $3, quiz_json = $2 WHERE id = $1`;
@@ -37,4 +37,4 @@ module.exports.saveQuiz = async function saveQuiz(quiz) {
   }
 
   return mapRow({ id, quiz_json, title });
-};
+}

@@ -1,7 +1,7 @@
-const express = require("express");
-const ctx = require("../data/context");
+import express from "express";
+import ctx from "../data/context.js";
 const router = express.Router();
-const render = require("./render");
+import render from "./render.js";
 
 function renderForm() {
   return `
@@ -47,4 +47,4 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,9 +1,9 @@
-const fs = require("fs");
-const path = require("path");
-const config = require("../src/config");
-const { Client } = require("pg");
+import fs from "fs";
+import path from "path";
+import config from "../src/config.js";
+import pg from "pg";
 
-const client = new Client({
+const client = new pg.Client({
   database: config.db.dbname,
   host: config.db.hostname,
   port: config.db.port,

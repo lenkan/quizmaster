@@ -1,6 +1,6 @@
-const log = require("./logger");
+import * as log from "./logger.js";
 
-module.exports = () => (req, res, next) => {
+export default () => (req, res, next) => {
   const now = Date.now();
   log.info("->", req.method, req.path);
   res.on("finish", () => {

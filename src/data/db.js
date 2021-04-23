@@ -1,7 +1,7 @@
-const { Client } = require("pg");
-const config = require("../config");
+import pg from "pg";
+import config from "../config.js";
 
-const client = new Client({
+const client = new pg.Client({
   database: config.db.dbname,
   host: config.db.hostname,
   user: config.db.username,
@@ -14,4 +14,4 @@ client.connect().catch((error) => {
   process.exit(1);
 });
 
-module.exports = client;
+export default client;

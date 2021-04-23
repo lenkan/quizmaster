@@ -1,6 +1,6 @@
-const express = require("express");
-const ctx = require("../data/context");
-const datefns = require("../date-fns");
+import express from "express";
+import ctx from "../data/context.js";
+import * as datefns from "../date-fns.js";
 const router = express.Router();
 
 router.get("/games/:id/players", async (req, res, next) => {
@@ -20,4 +20,4 @@ router.get("/games/:id/players", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

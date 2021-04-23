@@ -1,5 +1,5 @@
-const client = require("./db");
-const shortid = require("shortid");
+import client from "./db.js";
+import shortid from "shortid";
 
 function mapRow(row) {
   return {
@@ -31,16 +31,16 @@ function mapPlayerRow(row) {
   };
 }
 
-module.exports.createGame = async function createGame(quiz) {
+export async function createGame(quiz) {
   const { id: quiz_id, ...quiz_json } = quiz;
   const id = shortid();
   const sql = `INSERT INTO qm_game(id, quiz_id, quiz_json) VALUES ($1, $2, $3)`;
   await client.query(sql, [id, quiz_id, quiz_json]);
 
   return mapRow({ id, quiz_id, quiz_json });
-};
+}
 
-module.exports.getGameById = async function getGameById(id) {
+export async function getGameById(id) {
   const gameSQL = `
     SELECT id, quiz_json 
     FROM qm_game 
@@ -53,9 +53,9 @@ module.exports.getGameById = async function getGameById(id) {
   }
 
   return mapRow(rows[0]);
-};
+}
 
-module.exports.getPlayersByGameId = async function getPlayersByGameId(gameId) {
+export async function getPlayersByGameId(gameId) {
   const sql = `
     SELECT 
       qm_player.id,
@@ -69,9 +69,9 @@ module.exports.getPlayersByGameId = async function getPlayersByGameId(gameId) {
   const { rows } = await client.query(sql, [gameId]);
 
   return rows.map(mapPlayerRow);
-};
+}
 
-module.exports.getAnswers = async function getAnswers(id) {
+export async function getAnswers(id) {
   const sql = `
     SELECT
       qm_answer.id,
@@ -92,12 +92,9 @@ module.exports.getAnswers = async function getAnswers(id) {
   const { rows } = await client.query(sql, [id]);
 
   return rows.map(mapAnswerRow);
-};
+}
 
-module.exports.getPlayerAnswers = async function getPlayerAnswers(
-  id,
-  playerId
-) {
+export async function getPlayerAnswers(id, playerId) {
   const sql = `
 SELECT
   qm_answer.id,
@@ -119,28 +116,19 @@ WHERE
   const { rows } = await client.query(sql, [id, playerId]);
 
   return rows.map(mapAnswerRow);
-};
+}
 
-module.exports.saveAnswer = async function saveAnswer({
-  gameId,
-  questionId,
-  playerId,
-  text,
-}) {
+export async function saveAnswer({ gameId, questionId, playerId, text }) {
   const sql = `INSERT INTO qm_answer(game_id, question_id, player_id, text) VALUES ($1, $2, $3, $4);`;
   await client.query(sql, [gameId, questionId, playerId, text]);
-};
+}
 
-module.exports.savePlayer = async function savePlayer({
-  gameId,
-  playerId,
-  name,
-}) {
+export async function savePlayer({ gameId, playerId, name }) {
   const sql = `INSERT INTO qm_player(id, game_id, name) VALUES ($1, $2, $3);`;
   await client.query(sql, [playerId, gameId, name]);
-};
+}
 
-module.exports.getPlayerById = async function getPlayerById(playerId) {
+export async function getPlayerById(playerId) {
   const sql = `
     SELECT 
       id, 
@@ -157,4 +145,4 @@ module.exports.getPlayerById = async function getPlayerById(playerId) {
   }
 
   return mapPlayerRow(rows[0]);
-};
+}

@@ -8,7 +8,7 @@ function requireEnv(name, defaultValue) {
   return envValue !== undefined ? envValue : defaultValue;
 }
 
-module.exports = {
+export default {
   isProduction,
   db: {
     hostname: requireEnv("DB_HOST", "localhost"),

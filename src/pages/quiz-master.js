@@ -1,9 +1,9 @@
-const express = require("express");
-const gameRepo = require("../data/game-repo");
+import express from "express";
+import * as gameRepo from "../data/game-repo.js";
+import render from "./render.js";
+import config from "../config.js";
+import * as datefns from "../date-fns.js";
 const router = express.Router();
-const render = require("./render");
-const config = require("../config");
-const datefns = require("../date-fns");
 
 function renderQuestion(question) {
   return `
@@ -138,4 +138,4 @@ router.get("/quiz-master/:id", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

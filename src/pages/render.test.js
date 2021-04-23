@@ -1,5 +1,5 @@
 /* eslint-env jest */
-const render = require("./render");
+import render from "./render.js";
 
 test("should add title tag", () => {
   const result = render({ title: "My title" });

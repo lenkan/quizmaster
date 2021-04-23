@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 
 const name = process.argv[2];
 if (!name) {

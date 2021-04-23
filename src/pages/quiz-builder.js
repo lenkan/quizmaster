@@ -1,8 +1,9 @@
-const express = require("express");
-const quizRepo = require("../data/quiz-repo");
-const gameRepo = require("../data/game-repo");
+import express from "express";
+import * as quizRepo from "../data/quiz-repo.js";
+import * as gameRepo from "../data/game-repo.js";
+import render from "./render.js";
+
 const router = express.Router();
-const render = require("./render");
 
 function renderQuestion(quizId, question, index) {
   return `
@@ -132,4 +133,4 @@ router.post("/quiz-builder/:id/remove-question", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;
