@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "connect-redis": "5.1.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "1.17.1",
     "ioredis": "4.26.0",
     "pg": "8.6.0",
